@@ -11,16 +11,24 @@
  */
 
 const USUARIOS_DE_PRUEBA = {
+
   docentes: [
-    { id: "6a9cd740f89babdc05b2cfa8", nombre: "Luis Flores",     desc: "Programación I · Bases de Datos" },
+    { id: "6a9cd740f89babdc05b2cfa8", nombre: "Luis Flores", desc: "Programación I · Bases de Datos" },
     { id: "6a9cd740f89babdc05b2cfa7", nombre: "Ana Castellanos", desc: "Literatura Española · Redacción" },
-    { id: "6a9cd740f89babdc05b2cfa9", nombre: "Elena Martínez",  desc: "Psicología General · Sociología" },
+    { id: "6a9cd740f89babdc05b2cfa9", nombre: "Elena Martínez", desc: "Psicología General · Sociología" },
   ],
+
   estudiantes: [
-    { id: "6a9cdb16f89babdc05b2cfea", nombre: "David Rivas",       desc: "3 clases · en dificultades" },
-    { id: "6a9cdb16f89babdc05b2d014", nombre: "Omar Quintanilla",  desc: "4 clases · rendimiento mixto" },
-    { id: "6a9cdb16f89babdc05b2cfda", nombre: "Luis Hernandez",    desc: "4 clases · buen rendimiento" },
+    { id: "6a9cdb16f89babdc05b2cfea", nombre: "David Rivas", desc: "3 clases · en dificultades" },
+    { id: "6a9cdb16f89babdc05b2d014", nombre: "Omar Quintanilla", desc: "4 clases · rendimiento mixto" },
+    { id: "6a9cdb16f89babdc05b2cfda", nombre: "Luis Hernandez", desc: "4 clases · buen rendimiento" },
   ],
+
+   tutores: [
+    { id: "6aa5c5e89b9862a44b74670a", nombre: "Carlos Rivas", desc: "Tutor de David Rivas" },
+  ],
+
+
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -87,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   pintarUsuarios(document.getElementById("lista-docentes"), USUARIOS_DE_PRUEBA.docentes, "docente");
   pintarUsuarios(document.getElementById("lista-estudiantes"), USUARIOS_DE_PRUEBA.estudiantes, "estudiante");
-
+  pintarUsuarios(document.getElementById("lista-tutores"), USUARIOS_DE_PRUEBA.tutores, "tutor");
   // --- Estado del servidor: avisa antes de que el usuario intente entrar ---
   const punto = document.getElementById("punto-servidor");
   const texto = document.getElementById("texto-servidor");

@@ -278,25 +278,183 @@ def salud():
 
 @app.get("/api/login/{id_usuario}", tags=["Acceso"])
 def login(id_usuario: str):
-    """Identifica si un ID es de docente o de estudiante.
+    """Identifica si un ID es de docente, estudiante o tutor."""
 
-    No hay contraseñas a propósito: el proyecto demuestra el modelo predictivo,
-    y un sistema de autenticación real no aportaría nada a esa demostración.
-    """
     oid = a_oid(id_usuario)
 
+    # ---------------------------------------------------------
+    # DOCENTE
+    # ---------------------------------------------------------
     docente = db().Docentes.find_one({"_id": oid})
+
     if docente:
-        return {"rol": "docente", "id": str(oid), "nombre": docente.get("Nombre"),
-                "apellido": docente.get("Apellido"), "destino": "panel-docente.html"}
+        return {
+            "rol": "docente",
+            "id": str(oid),
+            "nombre": docente.get("Nombre"),
+            "apellido": docente.get("Apellido"),
+            "destino": "panel-docente.html"
+        }
 
+    # ---------------------------------------------------------
+    # ESTUDIANTE
+    # ---------------------------------------------------------
     estudiante = db().Estudiantes.find_one({"_id": oid})
+
     if estudiante:
-        return {"rol": "estudiante", "id": str(oid), "nombre": estudiante.get("Nombre"),
-                "apellido": estudiante.get("Apellido"), "destino": "dashboard.html"}
+        return {
+            "rol": "estudiante",
+            "id": str(oid),
+            "nombre": estudiante.get("Nombre"),
+            "apellido": estudiante.get("Apellido"),
+            "destino": "dashboard.html"
+        }
 
-    raise HTTPException(404, "Ese ID no corresponde a ningún docente ni estudiante")
+    # ---------------------------------------------------------
+    # TUTOR
+    # ---------------------------------------------------------
+    tutor = db().Tutores.find_one({"_id": oid})
 
+    if tutor:
+        return {
+            "rol": "tutor",
+            "id": str(oid),
+            "nombre": tutor.get("Nombre"),
+            "apellido": tutor.get("Apellido"),
+            "destino": "panel-tutor.html"
+        }
+
+    raise HTTPException(
+        404,
+        "Ese ID no corresponde a ningún docente, estudiante ni tutor"
+    )
+
+# ===========================================================================
+# Tutor
+# ===========================================================================
+
+@app.get("/api/tutores/{id_tutor}", tags=["Tutor"])
+def hijos_del_tutor(id_tutor: str):
+    """
+    Devuelve los hijos asociados a un tutor,
+    junto con las clases, docentes, notas y riesgo.
+    """
+
+    oid_tutor = a_oid(id_tutor)
+
+    # Buscar al tutor
+    tutor = db().Tutores.find_one({"_id": oid_tutor})
+
+    if not tutor:
+        raise HTTPException(404, "No existe ese tutor")
+
+    # Buscar hijos por el campo Hijos del tutor
+    ids_hijos = tutor.get("Hijos", [])
+
+    hijos = []
+
+    if ids_hijos:
+        ids_hijos_oid = []
+
+        for hijo_id in ids_hijos:
+            try:
+                if isinstance(hijo_id, ObjectId):
+                    ids_hijos_oid.append(hijo_id)
+                else:
+                    ids_hijos_oid.append(a_oid(str(hijo_id)))
+            except HTTPException:
+                continue
+
+        hijos = list(
+            db().Estudiantes.find(
+                {"_id": {"$in": ids_hijos_oid}}
+            )
+        )
+
+    # Si no encontró hijos mediante "Hijos",
+    # buscar estudiantes que tengan el campo Tutor.
+    if not hijos:
+        hijos = list(
+            db().Estudiantes.find(
+                {"Tutor": oid_tutor}
+            )
+        )
+
+    salida_hijos = []
+
+    for hijo in hijos:
+
+        id_hijo = hijo["_id"]
+
+        # Clases matriculadas
+        matriculadas = hijo.get("ClasesMatriculadas", [])
+
+        clases = {
+            c["_id"]: c
+            for c in db().Clases.find(
+                {"_id": {"$in": matriculadas}}
+            )
+        }
+
+        # Docentes
+        ids_docentes = [
+            c.get("Docente")
+            for c in clases.values()
+            if c.get("Docente")
+        ]
+
+        docentes = {
+            d["_id"]: d
+            for d in db().Docentes.find(
+                {"_id": {"$in": ids_docentes}}
+            )
+        }
+
+        # Calificaciones
+        por_clase = evaluaciones_de(id_hijo)
+
+        salida_clases = []
+
+        for clase_id in matriculadas:
+
+            clase = clases.get(clase_id)
+
+            if not clase:
+                continue
+
+            evaluaciones = por_clase.get(clase_id, [])
+
+            salida_clases.append({
+                "id": str(clase_id),
+                "nombre": clase.get("NombreClase"),
+                "docente": nombre_completo(
+                    docentes.get(clase.get("Docente"))
+                ),
+                **resumen_de_clase(
+                    clase_id,
+                    evaluaciones
+                )
+            })
+
+        salida_clases.sort(
+            key=lambda c: c["nombre"] or ""
+        )
+
+        salida_hijos.append({
+            "id": str(id_hijo),
+            "nombre": hijo.get("Nombre"),
+            "apellido": hijo.get("Apellido"),
+            "clases": salida_clases
+        })
+
+    return {
+        "tutor": {
+            "id": str(oid_tutor),
+            "nombre": tutor.get("Nombre"),
+            "apellido": tutor.get("Apellido")
+        },
+        "hijos": salida_hijos
+    }
 
 @app.get("/api/docentes/{id_docente}", tags=["Docente"])
 def clases_del_docente(id_docente: str):

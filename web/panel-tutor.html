@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Panel del Tutor</title>
+
+    <link rel="stylesheet" href="css/tutor.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div>
+            <h1>Panel del Tutor</h1>
+            <p id="bienvenida">Cargando...</p>
+        </div>
+
+        <button onclick="cerrarSesion()">Cerrar sesión</button>
+    </header>
+
+
+    <main class="contenedor">
+
+        <h2>Mis hijos</h2>
+
+        <div id="cargando" class="mensaje">
+            Cargando información...
+        </div>
+
+        <div id="error" class="mensaje error" style="display: none;">
+        </div>
+
+        <div id="hijos" class="hijos">
+        </div>
+
+    </main>
+
+
+    <script src="js/tutor.js"></script>
+
+</body>
+</html>

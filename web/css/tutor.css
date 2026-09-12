@@ -1,0 +1,356 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+}
+
+
+/* ---------------------------------------------------------
+   ENCABEZADO
+--------------------------------------------------------- */
+
+.header {
+    background: #ffffff;
+    padding: 25px 50px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 1px solid #ddd;
+}
+
+
+.header h1 {
+    margin-bottom: 6px;
+}
+
+
+.header p {
+    color: #666;
+}
+
+
+.header button {
+    border: none;
+    padding: 11px 18px;
+
+    border-radius: 7px;
+
+    background: #222;
+    color: white;
+
+    cursor: pointer;
+}
+
+
+.header button:hover {
+    opacity: 0.8;
+}
+
+
+/* ---------------------------------------------------------
+   CONTENEDOR
+--------------------------------------------------------- */
+
+.contenedor {
+    width: 90%;
+    max-width: 1100px;
+
+    margin: 35px auto;
+}
+
+
+.contenedor > h2 {
+    margin-bottom: 25px;
+}
+
+
+/* ---------------------------------------------------------
+   HIJOS
+--------------------------------------------------------- */
+
+.hijos {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(450px, 1fr));
+
+    gap: 25px;
+}
+
+
+.tarjeta-hijo {
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ---------------------------------------------------------
+   INFORMACIÓN DEL HIJO
+--------------------------------------------------------- */
+
+.hijo-header {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid #eee;
+}
+
+
+.avatar {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #e9ecef;
+
+    font-size: 22px;
+    font-weight: bold;
+}
+
+
+.hijo-header h3 {
+    margin-bottom: 5px;
+}
+
+
+.hijo-header p {
+    color: #777;
+    font-size: 14px;
+}
+
+
+/* ---------------------------------------------------------
+   CLASES
+--------------------------------------------------------- */
+
+.titulo-clases {
+    margin-bottom: 15px;
+}
+
+
+.clase {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px;
+
+    border: 1px solid #eee;
+
+    border-radius: 8px;
+
+    margin-bottom: 10px;
+}
+
+
+.clase-info h4 {
+    margin-bottom: 6px;
+}
+
+
+.clase-info p {
+    color: #777;
+
+    font-size: 14px;
+}
+
+
+.clase-nota {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+    justify-content: flex-end;
+}
+
+
+.clase-nota strong {
+    font-size: 20px;
+}
+
+
+/* ---------------------------------------------------------
+   ESTADOS
+--------------------------------------------------------- */
+
+.aprobado {
+    font-size: 12px;
+
+    padding: 5px 8px;
+
+    border-radius: 5px;
+
+    background: #e8f5e9;
+
+    color: #2e7d32;
+}
+
+
+.reprobado {
+    font-size: 12px;
+
+    padding: 5px 8px;
+
+    border-radius: 5px;
+
+    background: #ffebee;
+
+    color: #c62828;
+}
+
+
+/* ---------------------------------------------------------
+   RIESGO
+--------------------------------------------------------- */
+
+.riesgo {
+    font-size: 12px;
+
+    padding: 5px 8px;
+
+    border-radius: 5px;
+}
+
+
+.riesgo.bajo {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+
+.riesgo.medio {
+    background: #fff8e1;
+    color: #f57f17;
+}
+
+
+.riesgo.alto {
+    background: #ffebee;
+    color: #c62828;
+}
+
+
+/* ---------------------------------------------------------
+   MENSAJES
+--------------------------------------------------------- */
+
+.mensaje {
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 10px;
+
+    text-align: center;
+}
+
+
+.error {
+    color: #c62828;
+
+    background: #ffebee;
+
+    margin-bottom: 20px;
+}
+
+
+.sin-hijos {
+    background: white;
+
+    padding: 40px;
+
+    text-align: center;
+
+    border-radius: 10px;
+}
+
+
+.sin-hijos p {
+    color: #777;
+
+    margin-top: 10px;
+}
+
+
+.sin-clases {
+    color: #777;
+
+    padding: 15px 0;
+}
+
+
+
+
+@media (max-width: 600px) {
+
+    .header {
+        padding: 20px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+
+    .contenedor {
+        width: 94%;
+    }
+
+
+    .hijos {
+        grid-template-columns: 1fr;
+    }
+
+
+    .tarjeta-hijo {
+        padding: 18px;
+    }
+
+
+    .clase {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+
+    .clase-nota {
+        justify-content: flex-start;
+    }
+
+}
