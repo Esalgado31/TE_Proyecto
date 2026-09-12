@@ -95,6 +95,7 @@ const API = (() => {
 
     clasesDelEstudiante: (id) => pedir(`/api/estudiantes/${id}`),
     detalleDeClase: (idEst, idClase) => pedir(`/api/estudiantes/${idEst}/clases/${idClase}`),
+    tutor: (id) => pedir(`/api/tutores/${id}`),
 
     riesgo: (idEst, idClase) => pedir(`/api/riesgo/${idEst}/${idClase}`),
 
